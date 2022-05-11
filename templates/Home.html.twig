@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Home Page</h1>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores at aut blanditiis cum delectus, dolorem doloribus eius est expedita illo iste mollitia nihil reiciendis rem repellat rerum tempora veniam voluptatum.</p>
+    <a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a>
+</div>
+{% endblock %}
