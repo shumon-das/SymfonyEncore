@@ -6,6 +6,8 @@ use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use RuntimeException;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -73,62 +75,119 @@ class ResetPasswordController extends AbstractController
 
     /**
      * Validates and process the reset URL that the user clicked in their email.
+     *
+     * @throws Exception
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
-    public function reset(Request $request, UserPasswordHasherInterface $userPasswordHasher, string $token = null): Response
+    public function reset(string $token = null): Response
     {
-        if ($token) {
-            // We store the token in session and remove it from the URL, to avoid the URL being
-            // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
-            $this->storeTokenInSession($token);
-
-            return $this->redirectToRoute('app_reset_password');
+        try {
+            $this->checkTokenValid($token);
+        } catch (Exception $e) {
+            return $this->render('reset_password/reset.html.twig', [
+                'error' => $e->getMessage(),
+            ]);
         }
 
-        $token = $this->getTokenFromSession();
-        if (null === $token) {
-            throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
+        return $this->render('reset_password/reset.html.twig');
+    }
+
+    #[Route('/update-password', name: 'app_update_password', methods: 'post')]
+    public function updatePassword(Request $request, UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+        $newPassword     = $request->request->get('new_password');
+        $confirmPassword = $request->request->get('confirm_password');
+        $token           = $request->query->get('token');
+
+        if($newPassword !== $confirmPassword){
+            return $this->render('reset_password/reset.html.twig', [
+                'error' => "the new password and confirm password doesn't matched",
+            ]);
         }
 
         try {
-            $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
-        } catch (ResetPasswordExceptionInterface $e) {
-            $this->addFlash('reset_password_error', sprintf(
-                '%s - %s',
-                ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE,
-                $e->getReason()
-            ));
-
-            return $this->redirectToRoute('app_forgot_password_request');
+            $user = $this->checkTokenValid($token);
+        } catch (Exception $e) {
+            return $this->render('reset_password/reset.html.twig', [
+                'error' => $e->getMessage(),
+            ]);
         }
 
-        // The token is valid; allow the user to change their password.
-        $form = $this->createForm(ChangePasswordFormType::class);
-        $form->handleRequest($request);
+        // Encode(hash) the plain password, and set it.
+        $encodedPassword = $userPasswordHasher->hashPassword($user, $newPassword);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // A password reset token should be used only once, remove it.
-            $this->resetPasswordHelper->removeResetRequest($token);
+        $user->setPassword($encodedPassword);
+        $this->entityManager->flush();
 
-            // Encode(hash) the plain password, and set it.
-            $encodedPassword = $userPasswordHasher->hashPassword(
-                $user,
-                $form->get('plainPassword')->getData()
-            );
+        // The session is cleaned up after the password has been changed.
+        $this->cleanSessionAfterReset();
 
-            $user->setPassword($encodedPassword);
-            $this->entityManager->flush();
-
-            // The session is cleaned up after the password has been changed.
-            $this->cleanSessionAfterReset();
-
-            return $this->redirectToRoute('app_home');
-        }
+        // A password reset token should be used only once, remove it.
+        $this->resetPasswordHelper->removeResetRequest($token);
 
         return $this->render('reset_password/reset.html.twig', [
-            'resetForm' => $form->createView(),
+            'message' => "password rested successfully",
         ]);
     }
+
+//    /**
+//     * Validates and process the reset URL that the user clicked in their email.
+//     */
+//    #[Route('/reset/{token}', name: 'app_reset_password')]
+//    public function reset(Request $request, UserPasswordHasherInterface $userPasswordHasher, string $token = null): Response
+//    {
+//        if ($token) {
+//            // We store the token in session and remove it from the URL, to avoid the URL being
+//            // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
+//            $this->storeTokenInSession($token);
+//
+//            return $this->redirectToRoute('app_reset_password');
+//        }
+//
+//        $token = $this->getTokenFromSession();
+//        if (null === $token) {
+//            throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
+//        }
+//
+//        try {
+//            $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
+//        } catch (ResetPasswordExceptionInterface $e) {
+//            $this->addFlash('reset_password_error', sprintf(
+//                '%s - %s',
+//                ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE,
+//                $e->getReason()
+//            ));
+//
+//            return $this->redirectToRoute('app_forgot_password_request');
+//        }
+//
+//        // The token is valid; allow the user to change their password.
+//        $form = $this->createForm(ChangePasswordFormType::class);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            // A password reset token should be used only once, remove it.
+//            $this->resetPasswordHelper->removeResetRequest($token);
+//
+//            // Encode(hash) the plain password, and set it.
+//            $encodedPassword = $userPasswordHasher->hashPassword(
+//                $user,
+//                $form->get('plainPassword')->getData()
+//            );
+//
+//            $user->setPassword($encodedPassword);
+//            $this->entityManager->flush();
+//
+//            // The session is cleaned up after the password has been changed.
+//            $this->cleanSessionAfterReset();
+//
+//            return $this->redirectToRoute('app_home');
+//        }
+//
+//        return $this->render('reset_password/reset.html.twig', [
+//            'resetForm' => $form->createView(),
+//        ]);
+//    }
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
@@ -173,5 +232,27 @@ class ResetPasswordController extends AbstractController
         $this->setTokenObjectInSession($resetToken);
 
         return $this->redirectToRoute('app_check_email');
+    }
+
+    private function checkTokenValid(string $token = null): array|object
+    {
+        if ($token) {
+            // We store the token in session and remove it from the URL, to avoid the URL being
+            // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
+            $this->storeTokenInSession($token);
+        }
+
+        $token = $this->getTokenFromSession();
+        if (null === $token) {
+            throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
+        }
+
+        try {
+            $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
+        } catch (ResetPasswordExceptionInterface $e) {
+            throw new RuntimeException('There was a problem validating your password reset request: '.$e->getReason(), 401);
+        }
+
+        return $user;
     }
 }
