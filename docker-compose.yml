@@ -39,7 +39,17 @@ services:
     depends_on:
       - db
 
+  se_beanstalkd:
+    container_name: se_beanstalkd
+    image: schickling/beanstalkd
+    command: [ '-b', '/var/beanstalkd', '-V' ]
+    links:
+      - php
+    volumes:
+      - beanstalkd_volume:/var/beanstalkd
+
 volumes:
 ###> doctrine/doctrine-bundle ###
   db-data:
+  beanstalkd_volume:
 ###< doctrine/doctrine-bundle ###
