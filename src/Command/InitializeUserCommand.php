@@ -33,6 +33,11 @@ class InitializeUserCommand extends AbstractCommand
         $user->setEmail('monoranjan.das@covianalytics.com')
              ->setPassword($this->HashPassword('123456'))
              ->setRoles(['ROLE_USER'])
+             ->setCreatedAt(new \DateTimeImmutable('2022-05-16 1:10:00'))
+             ->setType('reader')
+             ->setUsername('Mono Ranjan')
+             ->setFirstName('Mono')
+             ->setLastName('Ranjan')
         ;
 
         $this->entityManager->persist($user);
