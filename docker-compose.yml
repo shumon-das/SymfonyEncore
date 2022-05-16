@@ -17,6 +17,7 @@ services:
       - "8090:80"
     depends_on:
       - php
+      - cache
 
   db:
     container_name: db
@@ -39,7 +40,19 @@ services:
     depends_on:
       - db
 
+  cache:
+    container_name: se_cache
+    image: redis:6.2-alpine
+    restart: "no"
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - cache:/data
+
 volumes:
 ###> doctrine/doctrine-bundle ###
   db-data:
+  cache:
+    driver: local
 ###< doctrine/doctrine-bundle ###
