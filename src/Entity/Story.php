@@ -44,7 +44,7 @@ class Story
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $updatedBy;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $deletedBy;
 
     #[ORM\Column(type: 'boolean')]
@@ -64,7 +64,7 @@ class Story
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'stories')]
     #[ORM\JoinColumn(nullable: false)]
-    private $Author;
+    private ?User $Author;
 
     public function getId(): ?int
     {

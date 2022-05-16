@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Valid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -25,9 +26,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string')]
     private string $password;
-
-    #[ORM\OneToMany(mappedBy: 'Author', targetEntity: Story::class)]
-    private $stories;
 
     public function __construct()
     {
@@ -104,33 +102,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Story>
-     */
-    public function getStories(): Collection
-    {
-        return $this->stories;
-    }
-
-    public function addStory(Story $story): self
-    {
-        if (!$this->stories->contains($story)) {
-            $this->stories[] = $story;
-            $story->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStory(Story $story): self
-    {
-        if ($this->stories->removeElement($story)) {
-            // set the owning side to null (unless already changed)
-            if ($story->getAuthor() === $this) {
-                $story->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -2,17 +2,22 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function home(): Response
+    public function home(UserRepository $userRepository): Response
     {
-        return $this->render('Home.html.twig');
+        $data = $userRepository->find(1);
+        return $this->render('Home.html.twig', [
+            'data' => $data,
+        ]);
     }
 
     #[Route('/security', name: 'app_security')]
