@@ -6,7 +6,7 @@
     <div class="row mt-5">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <form method="post">
+            <form method="post" style="margin-top: 30%">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
@@ -17,7 +17,7 @@
                     </div>
                 {% endif %}
 
-                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
                 <label for="inputEmail">Email</label>
                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                 <label for="inputPassword">Password</label>
