@@ -12,7 +12,13 @@ class SecurityController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
-        return $this->render('Home.html.twig');
+        $user = $this->getUser();
+        if(!$user){
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('Home.html.twig', [
+            'data' => $user
+        ]);
     }
 
     #[Route('/security', name: 'app_security')]
