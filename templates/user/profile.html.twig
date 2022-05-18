@@ -1,1 +1,151 @@
 {% extends 'base.html.twig' %}
+{% block title %}Dream Team{% endblock %}
+
+{% block body%}
+    <style>
+        /* start background-image */
+        .background-image{
+            width: 97%;
+            height: 300px;
+            margin: auto;
+            position: relative;
+            background: green url("../assets/images/background-image4.jpg") no-repeat;
+            background-size: 100% 100%;
+        }
+        .background-image-icon{
+            width: 35px;
+            height: 35px;
+            border: 1px solid white;
+            border-radius: 50%;
+            float: right;
+            margin: 20px;
+            text-align: center;
+            line-height: 35px;
+            color: white;
+        }
+        .background-image-icon:hover {
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+        /* end background image */
+        /* start profile image */
+        .profile-image{
+            position: absolute;
+            top: 200px;
+            left: 100px;
+        }
+        .profile-image > image{
+            position: relative;
+        }
+        .profile-image > form {
+            position: absolute;
+            top: 6%;
+            left: 10%;
+            opacity: 0;
+        }
+        .profile-image:hover form{
+            opacity: 1;
+        }
+        .fa-camera:hover{
+            opacity: 1;
+            cursor: pointer;
+        }
+        .profile-image > form > label{
+            font-size: 30px;
+            color: white;
+            border: 2px solid;
+            padding: 63px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        /* end profile image */
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="background-image">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <label for="background-image" class="background-image-icon"><i class="fa-solid fa-pencil"></i></label>
+                    <input type="file" name="background-image" id="background-image" style="display: none">
+                </form>
+                <div class="profile-image">
+                    <img src="../assets/images/user.png" alt="profile image" width="200" height="200">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <label for="profile-image" class="profile-image-icon"><i class="fa-solid fa-camera"></i></label>
+                        <input type="file" name="profile-image" id="profile-image" style="display: none">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <div class="row pl-2">
+                    <div class="col-md-8">
+                        <div class="username-info">
+                            <h2>{{ data.firstName }} {{ data.lastName }}</h2>
+                            <p>a professional web developer</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <strong>2541</strong>
+                                <span>Followers</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong>2541</strong>
+                                <span>Following</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row w-96 pt-3 m-auto">
+            <div class="col-md-9">
+                <div class="d-block">
+                    <h5>Your Stories</h5>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Story One</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquam animi aperiam beatae error, eveniet fugit itaque iusto laboriosam modi mollitia nam nesciunt officiis pariatur, qui quidem repellat repellendus, voluptatum!</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Story One</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquam animi aperiam beatae error, eveniet fugit itaque iusto laboriosam modi mollitia nam nesciunt officiis pariatur, qui quidem repellat repellendus, voluptatum!</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Story One</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquam animi aperiam beatae error, eveniet fugit itaque iusto laboriosam modi mollitia nam nesciunt officiis pariatur, qui quidem repellat repellendus, voluptatum!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h5>Saved stories</h5>
+                <div class="saved-stories row">
+                    <div class="col-sm-2">
+                        <img src="../assets/images/user.png" alt="saved-stories-icon" width="40" height="40">
+                    </div>
+                    <div class="col-sm-10">
+                        <strong>Story name</strong>
+                        <p><small>story writer name</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,33 +1,35 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">Dream Team</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup" >
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="#">Features</a>
-      <a class="nav-item nav-link" href="#">Pricing</a>
-      <a class="nav-item nav-link disabled" href="#">Disabled</a>
-    </div>
-    <div id="user row d-flex">
-       <div class="icon float-left pr-0" style="width: 45px">
-         <img
-              src="../assets/images/user.png"
-              alt="user-icon"
-              width="40"
-              height="40"
-         >
-       </div>
-      <div class="user-name float-left ml-0">
-        <strong class="name" style="line-height: 40px">
-          {% if data.username %}
-              {{ data.username }}
-          {% else %}
-              Username
-          {% endif %}
-        </strong>
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+    <a class="navbar-brand" href="/">Dream Team</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup" >
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="#">Features</a>
+        <a class="nav-item nav-link" href="#">Pricing</a>
+        <a class="nav-item nav-link disabled" href="#">Disabled</a>
+      </div>
+      <div id="user row d-flex">
+         <div class="icon float-left pr-0" style="width: 45px">
+           <img
+                src="../assets/images/user.png"
+                alt="user-icon"
+                width="40"
+                height="40"
+           >
+         </div>
+        <div class="user-name float-left ml-0">
+          <strong class="name" style="line-height: 40px">
+            {% if data.username %}
+                {{ data.username }}
+            {% else %}
+                Username
+            {% endif %}
+          </strong>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
+</div>

@@ -18,6 +18,10 @@ services:
     depends_on:
       - php
 
+#    command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+#    links:
+#      - se_beanstalkd
+
   db:
     container_name: db
     image: mariadb:10
@@ -43,8 +47,6 @@ services:
     container_name: se_beanstalkd
     image: schickling/beanstalkd
     command: [ '-b', '/var/beanstalkd', '-V' ]
-    links:
-      - php
     volumes:
       - beanstalkd_volume:/var/beanstalkd
 

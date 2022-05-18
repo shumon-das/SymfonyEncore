@@ -23,7 +23,6 @@ final class PracticeMailHandler implements MessageHandlerInterface
     public function __invoke(PracticeMail $message)
     {
         $data = $message->getMailData();
-        dump($data);die();
         $email = (new TemplatedEmail())
             ->from(new Address($data['from'], $data['fromName']))
             ->to($data['to'])
