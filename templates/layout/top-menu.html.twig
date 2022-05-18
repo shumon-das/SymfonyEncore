@@ -11,23 +11,45 @@
         <a class="nav-item nav-link" href="#">Pricing</a>
         <a class="nav-item nav-link disabled" href="#">Disabled</a>
       </div>
-      <div id="user row d-flex">
-         <div class="icon float-left pr-0" style="width: 45px">
+      <div class="row dropdown">
+        <div class="col-sm-2">
            <img
                 src="../assets/images/user.png"
                 alt="user-icon"
                 width="40"
                 height="40"
            >
-         </div>
-        <div class="user-name float-left ml-0">
-          <strong class="name" style="line-height: 40px">
-            {% if data.username %}
-                {{ data.username }}
-            {% else %}
-                Username
-            {% endif %}
-          </strong>
+        </div>
+        <div class="col-sm-10 text-center">
+          <span style="line-height: 40px;cursor:pointer" class="pl-1 pr-1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" >
+            <strong class="text-center" style="line-height: 40px">
+              {% if data.username %}
+                  {{ data.username }}
+              {% else %}
+                  Username
+              {% endif %}
+            </strong>
+          </span>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li>
+                <a class="dropdown-item pl-0" href="/profile">
+                  <span class="px-2"><i class="fa-solid fa-user"></i></span>
+                  <span>Profile</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item pl-0" href="/settings">
+                  <span class="px-2"><i class="fa-solid fa-gears"></i></span>
+                  <span>Settings</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item pl-0" href="/settings">
+                  <span class="px-2"><i class="fa-solid fa-gears"></i></span>
+                  <span>Settings</span>
+                </a>
+              </li>
+            </ul>
         </div>
       </div>
     </div>
