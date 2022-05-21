@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Libraries\Authentication\Authentication;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,13 +10,17 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    private Authentication $authentication;
+
+    public function __construct(Authentication $authentication)
+    {
+        $this->authentication = $authentication;
+    }
+
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
-        $user = $this->getUser();
-        if(!$user){
-            return $this->redirectToRoute('app_login');
-        }
+        $user = $this->authentication->ifAuthenticated();
         return $this->render('Home.html.twig', [
             'data' => $user
         ]);
