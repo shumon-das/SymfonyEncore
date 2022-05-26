@@ -42,6 +42,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $photo;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $backImage;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -180,6 +186,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getBackImage(): ?string
+    {
+        return $this->backImage;
+    }
+
+    public function setBackImage(?string $backImage): self
+    {
+        $this->backImage = $backImage;
 
         return $this;
     }

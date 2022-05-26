@@ -7,34 +7,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 
-class UploadFiles extends AbstractController
+class FileUploader extends AbstractController
 {
-    protected string $uploadDir;
+    private string $uploadDir;
     private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger, $uploadDir)
     {
-        $this->uploadDir = $uploadDir;
         $this->logger = $logger;
+        $this->uploadDir = $uploadDir;
     }
 
-    public function uploadSingleFile($file, $filename): Response
+    public function uploadSingleFile($file): string
     {
         if (empty($file))
         {
             return new Response("No file specified",
                Response::HTTP_UNPROCESSABLE_ENTITY, ['content-type' => 'text/plain']);
         }
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $fileName = $originalFilename.'-'.uniqid('', true).'.'.$file->guessExtension();
 
         try {
-            $file->move($this->uploadDir, $filename);
-            return $this->render('user/profile.html.twig', [
-            'data' => 'File uploaded successfully'
-        ]);
+            $file->move($this->uploadDir, $fileName);
         } catch (FileException $e){
             $this->logger->error('failed to upload image: ' . $e->getMessage());
             throw new FileException($e->getMessage());
         }
+        return $fileName;
     }
 
 //    public function uploadMultipleFiles()

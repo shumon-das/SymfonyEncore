@@ -8,6 +8,9 @@ RUN apt update \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
+RUN mkdir -p /var/www/html/public/uploads
+RUN chown -R www-data /var/www/html/public/uploads
+
 WORKDIR /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -17,7 +20,8 @@ RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 RUN git config --global user.email "shumonsb@gmail.com" \
     && git config --global user.name "monoranjan"
 
-RUN apt-get update && apt-get install -y nodejs npm
-#WORKDIR is /var/www/html
-COPY . /var/www/html/
-RUN npm install
+#RUN apt-get update && apt-get install -y nodejs npm
+
+#COPY . /var/www/html/
+#RUN npm install
+
