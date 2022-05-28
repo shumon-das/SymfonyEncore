@@ -12,10 +12,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
-class UserController extends AbstractController
+class UserController extends AbstractSeController
 {
     private EntityManagerInterface $entityManager;
     private FileUploader $uploadFiles;
@@ -29,35 +30,37 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param TokenStorageInterface $tokenStorage
      * @return Response
-     * @var User $user
      */
     #[Route('/profile', name: 'user_profile')]
-    public function profilePage(UserInterface $user): Response
+    public function profilePage(TokenStorageInterface $tokenStorage): Response
     {
-//        $user = $this->getUser();
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
-        $userInfo['id'] =  $user->getId();
-        $userInfo['email'] =  $user->getEmail();
-        $userInfo['roles'] =  $user->getRoles();
-        $userInfo['firstName'] =  $user->getFirstName();
-        $userInfo['lastName'] =  $user->getLastName();
-        $userInfo['username'] =  $user->getUsername();
-        $userInfo['type'] =  $user->getType();
-        $userInfo['createdAt'] =  $user->getCreatedAt();
-        $userInfo['updatedAt'] =  $user->getUpdatedAt();
+        $user = $tokenStorage->getToken() ? $tokenStorage->getToken()->getUser() : [];
+        if($user instanceof User){
+            $userInfo['id'] = $user->getId();
+            $userInfo['email'] =  $user->getEmail();
+            $userInfo['roles'] =  $user->getRoles();
+            /** @var UserDetails $detail */
+            $detail = $this->details->findOneBy(['userId' => $user->getId()]);
+            $userInfo['firstName'] =  $detail->getFirstName();
+            $userInfo['lastName'] =   $detail->getLastName();
+            $userInfo['username'] =   $detail->getUsername();
+            $userInfo['createdAt'] =  $detail->getCreatedAt();
+            $userInfo['updatedAt'] =  $detail->getUpdatedAt();
+            $userInfo['photo'] =      $detail->getPhoto();
+            $userInfo['backPhoto'] =  $detail->getBackgroundPhoto();
+            $userInfo['address'] =    $detail->getAddress();
 
-        $detail = $this->details->findOneBy(['userId' => $user->getId()]);
-        $userInfo['photo'] =  $detail->getPhoto();
-        $userInfo['backPhoto'] =  $detail->getBackPhoto();
-        $userInfo['address'] =  $detail->getAddress();
-        $userInfo['status'] =  $detail->getStatus();
-
-        return $this->render('user/profile.html.twig', [
+            return $this->render('user/profile.html.twig', [
             'data' => $userInfo
-        ]);
+            ]);
+        }
+
+       return $this->redirectToRoute('app_login');
     }
 
     /**
@@ -84,4 +87,5 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('user_profile');
     }
+
 }

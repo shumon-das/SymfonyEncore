@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Entity\UserDetails;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -14,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
-    name: 'Initialize:user',
+    name: 'init:user',
     description: 'Add a short description for your command',
 )]
 class InitializeUserCommand extends AbstractCommand
@@ -33,18 +34,25 @@ class InitializeUserCommand extends AbstractCommand
         $user->setEmail('monoranjan.das@covianalytics.com')
              ->setPassword($this->HashPassword('123456'))
              ->setRoles(['ROLE_USER'])
-             ->setCreatedAt(new \DateTimeImmutable('2022-05-16 1:10:00'))
-             ->setType('reader')
-             ->setUsername('Mono Ranjan')
-             ->setFirstName('Mono')
-             ->setLastName('Ranjan')
         ;
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        $userDetails = new UserDetails();
+        $userDetails->setPhoto('user.png')
+                    ->setBackgroundPhoto('background-image4.jpg')
+                    ->setFirstName('Mono')
+                    ->setLastName('Ranjan')
+                    ->setUsername('Mono Ranjan')
+                    ->setAddress('dhaka, bangladesh')
+                    ->setCreatedAt(new \DateTimeImmutable('2022-05-28 1:10:00'))
+                    ->setUserId($user->getId())
+        ;
+        $this->entityManager->persist($userDetails);
+        $this->entityManager->flush();
+
         $io = new SymfonyStyle($input, $output);
-        $io->success('A new user added in database');
+        $io->success('Initialize user created with basic user details');
 
         return Command::SUCCESS;
     }

@@ -13,34 +13,70 @@ class UserDetails
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'integer')]
-    private $userId;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $firstName;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $lastName;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $username;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photo;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $backPhoto;
+    private $backgroundPhoto;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private $address;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private $status;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $createdAt;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $updatedAt;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $userId;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getFirstName(): ?string
     {
-        return $this->userId;
+        return $this->firstName;
     }
 
-    public function setUserId(int $userId): self
+    public function setFirstName(?string $firstName): self
     {
-        $this->userId = $userId;
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }
@@ -57,14 +93,14 @@ class UserDetails
         return $this;
     }
 
-    public function getBackPhoto(): ?string
+    public function getBackgroundPhoto(): ?string
     {
-        return $this->backPhoto;
+        return $this->backgroundPhoto;
     }
 
-    public function setBackPhoto(?string $backPhoto): self
+    public function setBackgroundPhoto(?string $backgroundPhoto): self
     {
-        $this->backPhoto = $backPhoto;
+        $this->backgroundPhoto = $backgroundPhoto;
 
         return $this;
     }
@@ -81,14 +117,38 @@ class UserDetails
         return $this;
     }
 
-    public function getStatus(): ?bool
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->status;
+        return $this->createdAt;
     }
 
-    public function setStatus(?bool $status): self
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
     {
-        $this->status = $status;
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(?int $userId): self
+    {
+        $this->userId = $userId;
 
         return $this;
     }
