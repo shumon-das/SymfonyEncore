@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserDetailsRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserDetailsRepository::class)]
@@ -11,34 +12,34 @@ class UserDetails
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $firstName;
+    private ?string $firstName;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $lastName;
+    private ?string $lastName;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $username;
+    private ?string $username;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $photo;
+    private ?string $photo;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $backgroundPhoto;
+    private ?string $backgroundPhoto;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $address;
+    private ?string $address;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $createdAt;
+    private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $updatedAt;
+    private ?DateTimeImmutable $updatedAt;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $userId;
+    private ?int $userId;
 
     public function getId(): ?int
     {
@@ -117,24 +118,24 @@ class UserDetails
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(?DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(?DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
