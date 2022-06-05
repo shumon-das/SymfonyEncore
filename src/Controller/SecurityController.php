@@ -20,14 +20,14 @@ class SecurityController extends AbstractSeController
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
-//        $user = $this->authentication->ifAuthenticated();
-        $user = $this->getUser();
-        if(!$user){
+        if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
-        return $this->render('Home.html.twig', [
-            'data' => $user
-        ]);
+
+        return $this->redirectToRoute('user_profile');
+//        return $this->render('Home.html.twig', [
+//            'data' => $this->getUser()
+//        ]);
     }
 
     #[Route('/security', name: 'app_security')]
@@ -42,7 +42,7 @@ class SecurityController extends AbstractSeController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
-             return $this->redirectToRoute('app_home');
+             return $this->redirectToRoute('user_profile');
          }
 
         // get the login error if there is one

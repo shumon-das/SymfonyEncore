@@ -22,7 +22,7 @@ class FileUploader extends AbstractController
     {
         if (empty($file))
         {
-            return new Response("No file specified",
+            return new Response("Please choose a file...",
                Response::HTTP_UNPROCESSABLE_ENTITY, ['content-type' => 'text/plain']);
         }
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
