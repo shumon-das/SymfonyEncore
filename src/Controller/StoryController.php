@@ -6,13 +6,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StoryController extends AbstractController
+#[Route('/write', name: 'app_story')]
+class StoryController extends AbstractApiController
 {
-    #[Route('/story', name: 'app_story')]
-    public function index(): Response
+//    public function index(): Response
+//    {
+//        return $this->render('story/index.html.twig', [
+//            'controller_name' => 'StoryController',
+//        ]);
+//    }
+    public function action(): Response
     {
-        return $this->render('story/index.html.twig', [
-            'controller_name' => 'StoryController',
-        ]);
+        return $this->render('story/write.html.twig');
     }
 }
