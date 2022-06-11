@@ -1,12 +1,18 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
-RUN apt update \
-    && apt install -y zlib1g-dev g++ git libicu-dev zip libzip-dev zip \
+RUN apt-get update \
+    && apt-get install -y zlib1g-dev g++ git libicu-dev zip libzip-dev zip supervisor \
     && docker-php-ext-install intl opcache pdo pdo_mysql \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
+
+# Configure supervisord
+RUN mkdir -p /etc/supervisor/conf.d
+
+COPY conf/supervisord.conf /etc/supervisor
+COPY conf/supervisord-programs.conf /etc/supervisor/conf.d/app.conf
 
 RUN mkdir -p /var/www/html/public/uploads
 RUN chown -R www-data /var/www/html/public/uploads

@@ -6,6 +6,7 @@ services:
       context: ./docker/php
     volumes:
       - .:/var/www/html
+    command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
   nginx:
     container_name: nginx
@@ -18,9 +19,6 @@ services:
     depends_on:
       - php
 
-#    command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-#    links:
-#      - se_beanstalkd
 
   db:
     container_name: db
