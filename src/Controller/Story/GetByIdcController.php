@@ -3,15 +3,13 @@
 namespace App\Controller\Story;
 
 use App\Controller\AbstractApiController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class GetByIdcController extends AbstractApiController
 {
-    public function action(): Response
+    public function action(): JsonResponse
     {
-        return $this->render('story/write.html.twig', [
-            'controller_name' => 'StoryController',
-        ]);
+        return $this->json('something');
     }
 }

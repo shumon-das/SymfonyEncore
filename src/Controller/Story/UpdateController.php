@@ -3,26 +3,19 @@
 namespace App\Controller\Story;
 
 use App\Controller\AbstractApiController;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/update', name: 'update_story', methods: 'post')]
 class UpdateController extends AbstractApiController
 {
-    private RequestStack $request;
-
-    public function __construct(RequestStack $requestStack)
+    public function action(): JsonResponse
     {
-        $this->request = $requestStack;
-    }
-
-    #[Route('/update/{id}', name: 'update_story')]
-    public function action(): Response
-    {
-        $request = $this->request->getCurrentRequest();
-        return $this->render('story/write.html.twig', [
-            'id' => $request?->get('id'),
+        return $this->json([
+            'data' => [
+                'id' => $this->request->request->get('id'),
+                'name' => $this->request->request->get('name')
+            ]
         ]);
     }
 }

@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
-class UserController extends AbstractSeController
+class UserController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
     private FileUploader $uploadFiles;

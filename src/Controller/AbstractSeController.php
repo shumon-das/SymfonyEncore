@@ -2,18 +2,25 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 
-class AbstractSeController extends AbstractController
+abstract class AbstractSeController extends AbstractController
 {
-    public function __invoke(TokenStorageInterface $tokenStorage)
+    public function __invoke(LoggerInterface $logger)
     {
-        $checkUserLoggedInOrNot = $tokenStorage->getToken()->getUser();
-        if(!$checkUserLoggedInOrNot instanceof User){
-            $this->redirectToRoute('app_login');
+        try{
+            return $this->action();
+        }catch (Throwable $e) {
+            $logger->error("AbstractApiController::__invoke() - " . get_class($e) . " - File: " . $e->getFile() .
+                " - Line: " . $e->getLine() . " - Code: " . $e->getCode() . " - Message: " . $e->getMessage() .
+                " - Trace: " . $e->getTraceAsString()
+            );
         }
     }
+
+    abstract public function action(): Response;
 }
