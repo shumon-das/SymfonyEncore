@@ -40,7 +40,7 @@ services:
     depends_on:
       - db
 
-  cache:
+  redis:
     container_name: se_cache
     image: redis:6.2-alpine
     restart: "no"
